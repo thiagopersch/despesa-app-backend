@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String         @id @default(uuid())
+  name            String
+  login           String         @unique
+  password        String
+  change_password Boolean?       @default(true)
+  status          Boolean?       @default(true)
+  user_profiles   User_profiles? @relation(fields: [user_profilesId], references: [id])
+  user_profilesId String?
+  createdAt       DateTime       @default(now()) @db.Timestamptz()
+  updatedAt       DateTime       @updatedAt @db.Timestamptz()
+  deletedAt       DateTime?      @db.Timestamptz()
+  Expense         Expense?       @relation(fields: [expenseId], references: [id])
+  expenseId       String?
+}
+
+model Profile {
+  id                String           @id @default(uuid())
+  code              String
+  name              String
+  status            Boolean          @default(true)
+  user_profiles     User_profiles?   @relation(fields: [user_profilesId], references: [id])
+  user_profilesId   String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  deletedAt         DateTime?
+  Module_profiles   Module_profiles? @relation(fields: [module_profilesId], references: [id])
+  module_profilesId String?
+}
+
+model Module {
+  id                String           @id @default(uuid())
+  code              String
+  name              String
+  status            Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  deletedAt         DateTime?
+  Module_profiles   Module_profiles? @relation(fields: [module_profilesId], references: [id])
+  module_profilesId String?
+}
+
+model User_profiles {
+  id         String    @id @default(uuid())
+  user_id    User[]
+  profile_id Profile[]
+  read       Boolean   @default(true)
+  write      Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+}
+
+model Module_profiles {
+  id         String    @id @default(uuid())
+  module_id  Module[]
+  profile_id Profile[]
+  status     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+}
+
+model Year {
+  id        String    @id @default(uuid())
+  year      String
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Month     Month[]
+}
+
+model Month {
+  id        String    @id @default(uuid())
+  name      String
+  year      Year      @relation(fields: [yearId], references: [id])
+  yearId    String
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Expense   Expense?  @relation(fields: [expenseId], references: [id])
+  expenseId String?
+}
+
+model Payment_methods {
+  id        String    @id @default(uuid())
+  name      String
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Expense   Expense?  @relation(fields: [expenseId], references: [id])
+  expenseId String?
+}
+
+model Priority {
+  id        String    @id @default(uuid())
+  name      String
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Expense   Expense?  @relation(fields: [expenseId], references: [id])
+  expenseId String?
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  image     String
+  name      String
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Expense   Expense?  @relation(fields: [expenseId], references: [id])
+  expenseId String?
+}
+
+model Tags {
+  id        String    @id @default(uuid())
+  name      String
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Expense   Expense?  @relation(fields: [expenseId], references: [id])
+  expenseId String?
+}
+
+model Type_accounts {
+  id         String    @id @default(uuid())
+  bank_image String
+  bank_name  String
+  bank_type  String
+  bank_color String
+  status     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  Expense    Expense?  @relation(fields: [expenseId], references: [id])
+  expenseId  String?
+}
+
+model Expense {
+  id                 String            @id @default(uuid())
+  user_id            User[]
+  payment_methods_id Payment_methods[]
+  priority_id        Priority[]
+  month_id           Month[]
+  category_id        Category[]
+  tags_id            Tags[]
+  type_account_id    Type_accounts[]
+  name               String
+  description        String
+  amount_to_pay      Float
+  amount_paid        Float
+  pay_day            DateTime
+  due_date           DateTime
+  fixed_expense      Boolean
+  repeat             Boolean
+  number_repeat      Int
+  type_repeat        String
+  situation          String
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  deletedAt          DateTime?
+}
