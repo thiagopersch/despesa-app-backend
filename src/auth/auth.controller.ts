@@ -1,6 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import AppError from 'src/utils/appError';
 import { AuthService } from './auth.service';
+import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Controller('auth')
@@ -12,11 +14,21 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() userData: { name: string; login: string; password: string },
+    @Body()
+    userData: CreateAuthDto,
   ) {
-    const user = await this.authService.createUser(userData);
-    const token = this.jwtService.sign({ userId: user.id, login: user.login });
-    return { message: 'Registration successful', user, token };
+    try {
+      const user = await this.authService.createUser(userData);
+      const token = this.jwtService.sign({
+        userId: user.id,
+        login: user.login,
+      });
+      return { message: 'Registration successful', user, token };
+    } catch (error) {
+      if (userData.login) {
+        throw new AppError('user already found');
+      }
+    }
   }
 
   @Post('signin')
@@ -31,8 +43,15 @@ export class AuthController {
 
   @Post('update-user')
   async updateUser(@Body() userData: UpdateAuthDto) {
-    const user = await this.authService.updateUser(userData);
-    const token = this.jwtService.sign({ userId: user.id, login: user.login });
-    return { message: 'Update successfull', user, token };
+    try {
+      const user = await this.authService.updateUser(userData);
+      const token = this.jwtService.sign({
+        userId: user.id,
+        login: user.login,
+      });
+      return { message: 'Update successfull', user, token };
+    } catch (error) {
+      throw new AppError('user not found');
+    }
   }
 }

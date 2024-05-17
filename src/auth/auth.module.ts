@@ -10,7 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' }, // Configuração do tempo de expiração do token
+      signOptions: { expiresIn: '1h' }, // Token expiration time configuration
     }),
     ConfigModule,
   ],
