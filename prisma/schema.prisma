@@ -27,6 +27,15 @@ model User {
   deletedAt       DateTime?      @db.Timestamptz()
   Expense         Expense?       @relation(fields: [expenseId], references: [id])
   expenseId       String?
+  Session         Session[]
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  User         User?    @relation(fields: [userId], references: [id])
+  expires      DateTime
 }
 
 model Profile {

@@ -16,20 +16,23 @@ export class AuthController {
   ) {
     const user = await this.authService.createUser(userData);
     const token = this.jwtService.sign({ userId: user.id, login: user.login });
-    return { token };
+    return { message: 'Registration successful', user, token };
   }
 
-  @Post('sigin')
+  @Post('signin')
   async login(@Body() credentials: { login: string; password: string }) {
     const user = await this.authService.validateUser(credentials);
     const token = this.jwtService.sign({ userId: user.id, login: user.login });
-    return { token };
+    if (user) {
+      return { message: 'Login successfull', user, token };
+    }
+    return { message: 'Invalid credentials' };
   }
 
   @Post('update-user')
   async updateUser(@Body() userData: UpdateAuthDto) {
     const user = await this.authService.updateUser(userData);
     const token = this.jwtService.sign({ userId: user.id, login: user.login });
-    return { token };
+    return { message: 'Update successfull', user, token };
   }
 }
