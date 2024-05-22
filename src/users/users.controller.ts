@@ -7,17 +7,28 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @Post('create')
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
+    const token = this.jwtService.sign({
+      login: user?.login,
+      name: user?.name,
+      password: user?.password,
+    });
+
+    return { user, token };
   }
 
   @Get()
