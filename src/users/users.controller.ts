@@ -25,7 +25,6 @@ export class UsersController {
     const token = this.jwtService.sign({
       login: user?.login,
       name: user?.name,
-      password: user?.password,
     });
 
     return { user, token };
@@ -42,12 +41,17 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    console.log(id);
+    const user = await this.usersService.update(id, updateUserDto);
+
+    return user;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: string) {
+    const user = await this.usersService.remove(id);
+
+    return user;
   }
 }

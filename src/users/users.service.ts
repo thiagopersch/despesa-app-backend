@@ -18,15 +18,14 @@ export class UsersService {
     if (existUser) {
       throw new AppError('User already exists', 400);
     }
+
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = await this.prisma.user.create({
       data: { ...userData, password: hashedPassword },
     });
 
-    console.log('User created:', user);
     return user;
   }
-
   findAll() {
     return this.prisma.user.findMany({ where: { deletedAt: null } });
   }
@@ -34,7 +33,7 @@ export class UsersService {
   findOne(id: string) {
     const user = this.prisma.user.findUnique({ where: { id } });
     if (!user) {
-      throw new AppError('Usuário não encontrado.', 404);
+      throw new AppError('User not found.', 404);
     }
 
     return user;
@@ -43,20 +42,49 @@ export class UsersService {
   async update(id: string, data: UpdateUserDto) {
     const user = await this.findOne(id);
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    /* if (data.login && data.login !== user.login) {
+      const existUser = await this.prisma.user.findUnique({
+        where: { login: data.login },
+        select: { login: true },
+      });
+      if (existUser) {
+        throw new AppError('User with this login already exists', 400);
+      }
+    } */
 
-    return this.prisma.user.update({
-      where: { id: user.id },
-      data: { ...data, password: hashedPassword },
+    let updateData = { ...data };
+
+    if (data.password) {
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+      updateData = { ...updateData, password: hashedPassword };
+    }
+
+    const existUser = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true },
     });
+
+    if (!existUser) {
+      throw new AppError('User not found.', 404);
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: updateData,
+    });
+
+    console.log('User updated:', updatedUser);
+    return updatedUser;
   }
 
   async remove(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
-    console.log(user);
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true },
+    });
 
     if (!user) {
-      throw new AppError('Usuário não encontrado.', 404);
+      throw new AppError('User not found.', 404);
     }
 
     return this.prisma.user.update({

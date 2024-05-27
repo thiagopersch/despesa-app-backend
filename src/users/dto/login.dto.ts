@@ -1,5 +1,5 @@
-export type UserLogin = {
+export class UserLogin {
   userId?: string;
   login: string;
   password: string;
-};
+}

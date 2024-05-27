@@ -1,3 +1,6 @@
+// auth.controller.ts
+
+import { User } from '.prisma/client';
 import { Body, Controller, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import AppError from 'src/utils/appError';
@@ -14,44 +17,53 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body()
-    userData: CreateAuthDto,
-  ) {
+    @Body() userData: CreateAuthDto,
+  ): Promise<{ message: string; user: User; token: string }> {
     try {
       const user = await this.authService.createUser(userData);
-      const token = this.jwtService.sign({
-        userId: user.id,
-        login: user.login,
-      });
+      const token = this.generateToken(user.id, user.login);
       return { message: 'Registration successful', user, token };
     } catch (error) {
-      if (userData.login) {
-        throw new AppError('user already found');
+      if (error.code === 'P2002') {
+        throw new AppError('User already exists');
       }
+      throw new AppError('Unexpected error occurred');
     }
   }
 
   @Post('signin')
-  async login(@Body() credentials: { login: string; password: string }) {
-    const user = await this.authService.validateUser(credentials);
-    const token = this.jwtService.sign({ userId: user.id, login: user.login });
-    if (user) {
-      return { message: 'Login successfull', user, token };
+  async login(
+    @Body() credentials: { login: string; password: string },
+  ): Promise<{ message: string; user: User; token: string }> {
+    try {
+      const user = await this.authService.validateUser(
+        credentials.login,
+        credentials.password,
+      );
+      const token = this.generateToken(user.id, user.login);
+      return { message: 'Login successful', user, token };
+    } catch (error) {
+      throw new AppError('Invalid credentials', 401);
     }
-    return { message: 'Invalid credentials' };
   }
 
   @Post('update-user')
-  async updateUser(@Body() userData: UpdateAuthDto) {
+  async updateUser(
+    @Body() userData: UpdateAuthDto,
+  ): Promise<{ message: string; user: User; token: string }> {
     try {
       const user = await this.authService.updateUser(userData);
-      const token = this.jwtService.sign({
-        userId: user.id,
-        login: user.login,
-      });
-      return { message: 'Update successfull', user, token };
+      const token = this.generateToken(user.id, user.login);
+      return { message: 'Update successful', user, token };
     } catch (error) {
-      throw new AppError('user not found');
+      if (error.code === 'P2025') {
+        throw new AppError('User not found');
+      }
+      throw new AppError('Unexpected error occurred');
     }
+  }
+
+  private generateToken(userId: string, login: string): string {
+    return this.jwtService.sign({ userId, login });
   }
 }
