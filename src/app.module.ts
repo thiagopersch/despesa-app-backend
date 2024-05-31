@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
 import { YearModule } from './year/year.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { YearModule } from './year/year.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule,
     SessionModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

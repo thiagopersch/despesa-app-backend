@@ -42,16 +42,6 @@ export class UsersService {
   async update(id: string, data: UpdateUserDto) {
     const user = await this.findOne(id);
 
-    /* if (data.login && data.login !== user.login) {
-      const existUser = await this.prisma.user.findUnique({
-        where: { login: data.login },
-        select: { login: true },
-      });
-      if (existUser) {
-        throw new AppError('User with this login already exists', 400);
-      }
-    } */
-
     let updateData = { ...data };
 
     if (data.password) {
