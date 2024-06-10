@@ -8,9 +8,9 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateCategoryDto) {
+  async create(categoryData: CreateCategoryDto) {
     const existCategory = await this.prisma.category.findUnique({
-      where: { name: data.name },
+      where: { name: categoryData.name },
       select: { name: true },
     });
 
@@ -18,7 +18,9 @@ export class CategoriesService {
       throw new AppError('Category already exists', 400);
     }
 
-    const category = await this.prisma.category.create({ data: { ...data } });
+    const category = await this.prisma.category.create({
+      data: { ...categoryData },
+    });
 
     return category;
   }

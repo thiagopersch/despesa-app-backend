@@ -16,10 +16,9 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post('create')
-  async create(@Body() data: CreateCategoryDto) {
-    const category = await this.categoriesService.create(data);
-
-    return { category };
+  async create(@Body() categoryData: CreateCategoryDto) {
+    const category = await this.categoriesService.create(categoryData);
+    return category;
   }
 
   @Get()
@@ -35,8 +34,7 @@ export class CategoriesController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() data: UpdateCategoryDto) {
     const category = await this.categoriesService.update(id, data);
-
-    return category;
+    return { category };
   }
 
   @Delete(':id')

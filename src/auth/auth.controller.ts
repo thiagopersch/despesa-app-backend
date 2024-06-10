@@ -35,16 +35,12 @@ export class AuthController {
   async login(
     @Body() credentials: { login: string; password: string },
   ): Promise<{ message: string; user: User; token: string }> {
-    try {
-      const user = await this.authService.validateUser(
-        credentials.login,
-        credentials.password,
-      );
-      const token = this.generateToken(user.id, user.login);
-      return { message: 'Login successful', user, token };
-    } catch (error) {
-      throw new AppError('Invalid credentials', 401);
-    }
+    const user = await this.authService.validateUser(
+      credentials.login,
+      credentials.password,
+    );
+    const token = this.generateToken(user.id, user.login);
+    return { message: 'Login successful', user, token };
   }
 
   @Post('update-user')

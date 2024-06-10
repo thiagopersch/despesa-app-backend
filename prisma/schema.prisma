@@ -132,7 +132,6 @@ model Priority {
 
 model Category {
   id        String    @id @default(uuid())
-  image     String
   name      String    @unique
   status    Boolean   @default(true)
   createdAt DateTime  @default(now())
@@ -156,7 +155,6 @@ model Tags {
 model Type_accounts {
   id         String    @id @default(uuid())
   bank_code  String    @unique
-  bank_image String
   bank_name  String
   bank_type  String
   bank_color String

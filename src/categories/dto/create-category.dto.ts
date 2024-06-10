@@ -1,6 +1,5 @@
-export class CreateCategoryDto {
+export type CreateCategoryDto = {
   id?: string;
-  image: string;
   name: string;
   status: boolean;
-}
+};

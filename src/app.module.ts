@@ -4,12 +4,12 @@ import { PrismaClient } from '@prisma/client';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './categories/categories.module';
 import { MonthsModule } from './months/months.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
 import { YearModule } from './year/year.module';
-import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [

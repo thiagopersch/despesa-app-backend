@@ -33,12 +33,14 @@ export class AuthService {
     if (!login || !password) {
       throw new AppError('Invalid credentials', 401);
     }
+
     const user = await this.prisma.user.findUnique({
       where: { login },
     });
     if (!user) {
       throw new AppError('Invalid credentials', 401);
     }
+
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       throw new AppError('Invalid credentials', 401);
