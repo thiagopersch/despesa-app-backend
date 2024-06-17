@@ -40,7 +40,7 @@ model Session {
 
 model Profile {
   id                String           @id @default(uuid())
-  code              String
+  code              String           @unique
   name              String
   status            Boolean          @default(true)
   user_profiles     User_profiles?   @relation(fields: [user_profilesId], references: [id])
@@ -54,7 +54,7 @@ model Profile {
 
 model Module {
   id                String           @id @default(uuid())
-  code              String
+  code              String           @unique
   name              String
   status            Boolean          @default(true)
   createdAt         DateTime         @default(now())
@@ -87,7 +87,7 @@ model Module_profiles {
 
 model Year {
   id        String    @id @default(uuid())
-  year      String
+  year      String    @unique
   status    Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -97,7 +97,7 @@ model Year {
 
 model Month {
   id        String    @id @default(uuid())
-  name      String
+  name      String    @unique
   year      Year      @relation(fields: [yearId], references: [id])
   yearId    String
   status    Boolean   @default(true)
@@ -110,7 +110,7 @@ model Month {
 
 model Payment_methods {
   id        String    @id @default(uuid())
-  name      String
+  name      String    @unique
   status    Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -121,7 +121,7 @@ model Payment_methods {
 
 model Priority {
   id        String    @id @default(uuid())
-  name      String
+  name      String    @unique
   status    Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -155,7 +155,7 @@ model Tags {
 model Type_accounts {
   id         String    @id @default(uuid())
   bank_code  String    @unique
-  bank_name  String
+  bank_name  String    @unique
   bank_type  String
   bank_color String
   status     Boolean   @default(true)

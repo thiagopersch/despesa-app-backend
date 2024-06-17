@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
 import { YearModule } from './year/year.module';
+import { PrioritiesModule } from './priorities/priorities.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { YearModule } from './year/year.module';
     AuthModule,
     SessionModule,
     CategoriesModule,
+    PrioritiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

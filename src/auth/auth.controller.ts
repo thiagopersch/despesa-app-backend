@@ -52,7 +52,7 @@ export class AuthController {
       const token = this.generateToken(user.id, user.login);
       return { message: 'Update successful', user, token };
     } catch (error) {
-      if (error.code === 'P2025') {
+      if (error.code === '404') {
         throw new AppError('User not found');
       }
       throw new AppError('Unexpected error occurred');

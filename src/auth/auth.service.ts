@@ -37,6 +37,7 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { login },
     });
+
     if (!user) {
       throw new AppError('Invalid credentials', 401);
     }
