@@ -11,6 +11,7 @@ import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
 import { YearModule } from './year/year.module';
 import { PrioritiesModule } from './priorities/priorities.module';
+import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PrioritiesModule } from './priorities/priorities.module';
     SessionModule,
     CategoriesModule,
     PrioritiesModule,
+    PaymentMethodsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
