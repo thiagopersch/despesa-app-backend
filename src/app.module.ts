@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 import { YearModule } from './year/year.module';
 import { PrioritiesModule } from './priorities/priorities.module';
 import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
+import { YearsModule } from './years/years.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
     CategoriesModule,
     PrioritiesModule,
     PaymentMethodsModule,
+    YearsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
