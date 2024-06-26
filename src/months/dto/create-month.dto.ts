@@ -1,1 +1,4 @@
-export class CreateMonthDto {}
+export class CreateMonthDto {
+  name: string;
+  status: boolean;
+}

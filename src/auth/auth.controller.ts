@@ -1,8 +1,7 @@
-// auth.controller.ts
-
-import { User } from '.prisma/client';
 import { Body, Controller, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
+import { User } from '@prisma/client';
 import AppError from 'src/utils/appError';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -24,10 +23,7 @@ export class AuthController {
       const token = this.generateToken(user.id, user.login);
       return { message: 'Registration successful', user, token };
     } catch (error) {
-      if (error.code === 'P2002') {
-        throw new AppError('User already exists');
-      }
-      throw new AppError('Unexpected error occurred');
+      throw new AppError('User already exists', 400);
     }
   }
 
@@ -52,10 +48,7 @@ export class AuthController {
       const token = this.generateToken(user.id, user.login);
       return { message: 'Update successful', user, token };
     } catch (error) {
-      if (error.code === '404') {
-        throw new AppError('User not found');
-      }
-      throw new AppError('Unexpected error occurred');
+      throw new AppError('User not found', 404);
     }
   }
 

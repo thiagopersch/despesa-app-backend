@@ -27,16 +27,16 @@ export class MonthsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.monthsService.findOne(+id);
+    return this.monthsService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMonthDto: UpdateMonthDto) {
-    return this.monthsService.update(+id, updateMonthDto);
+    return this.monthsService.update(id, updateMonthDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.monthsService.remove(+id);
+    return this.monthsService.remove(id);
   }
 }

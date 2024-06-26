@@ -1,26 +1,72 @@
 import { Injectable } from '@nestjs/common';
+import { Month } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
+import AppError from 'src/utils/appError';
 import { CreateMonthDto } from './dto/create-month.dto';
 import { UpdateMonthDto } from './dto/update-month.dto';
 
 @Injectable()
 export class MonthsService {
-  create(createMonthDto: CreateMonthDto) {
-    return 'This action adds a new month';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createMonthDto: CreateMonthDto) {
+    const existMonth = await this.prisma.month.findUnique({
+      where: { name: createMonthDto.name },
+      select: { name: true },
+    });
+
+    if (existMonth) {
+      throw new AppError('Month already exists', 400);
+    }
+
+    const month = await this.prisma.month.create({
+      data: { ...createMonthDto },
+    });
+    return month;
   }
 
-  findAll() {
-    return `This action returns all months`;
+  async findAll(): Promise<Month[]> {
+    const month = await this.prisma.month.findMany({
+      where: { deletedAt: null },
+    });
+
+    return month;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} month`;
+  async findOne(id: string) {
+    const month = await this.prisma.month.findUnique({
+      where: { id },
+    });
+    return month;
   }
 
-  update(id: number, updateMonthDto: UpdateMonthDto) {
-    return `This action updates a #${id} month`;
+  async update(id: string, updateMonthDto: UpdateMonthDto) {
+    const month = await this.findOne(id);
+
+    let updatedData = { ...updateMonthDto };
+
+    const updatedMonth = await this.prisma.month.update({
+      where: { id: month.id },
+      data: updatedData,
+    });
+    return updatedMonth;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} month`;
+  async remove(id: string) {
+    const existMonth = await this.prisma.month.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    if (!existMonth) {
+      throw new AppError('Month not found.', 404);
+    }
+
+    const month = await this.prisma.month.update({
+      where: { id },
+      data: { deletedAt: new Date(), status: false },
+    });
+
+    return month;
   }
 }

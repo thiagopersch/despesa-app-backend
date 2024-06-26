@@ -92,14 +92,11 @@ model Year {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  Month     Month[]
 }
 
 model Month {
   id        String    @id @default(uuid())
   name      String    @unique
-  year      Year      @relation(fields: [yearId], references: [id])
-  yearId    String
   status    Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

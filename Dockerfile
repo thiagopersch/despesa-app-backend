@@ -1,11 +1,18 @@
 FROM node:latest
-WORKDIR /app
-COPY . .
 
+WORKDIR /app
+
+# Copie apenas os arquivos de dependências primeiro
+COPY package.json ./
+
+# Instale as dependências
 RUN yarn install
-COPY package*.json ./
+
+# Então copie o restante dos arquivos
+COPY . .
 
 EXPOSE 3333
 
-CMD ["yarn","sdev"]
+RUN yarn prisma:generate
 
+CMD ["yarn","dev"]

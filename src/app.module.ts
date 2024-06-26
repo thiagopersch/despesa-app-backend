@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { PrismaClient } from '@prisma/client';
 import { AppController } from './app.controller';
@@ -6,22 +7,24 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { MonthsModule } from './months/months.module';
+import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
+import { PrioritiesModule } from './priorities/priorities.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
-import { YearModule } from './year/year.module';
-import { PrioritiesModule } from './priorities/priorities.module';
-import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
 import { YearsModule } from './years/years.module';
 
 @Module({
   imports: [
     UsersModule,
-    YearModule,
     MonthsModule,
     PrismaClient,
     PrismaModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env`,
+    }),
     AuthModule,
     SessionModule,
     CategoriesModule,

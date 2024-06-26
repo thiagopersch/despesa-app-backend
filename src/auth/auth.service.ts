@@ -1,7 +1,5 @@
-// auth.service.ts
-
-import { User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import AppError from 'src/utils/appError';
