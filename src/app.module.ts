@@ -13,6 +13,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
 import { YearsModule } from './years/years.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { YearsModule } from './years/years.module';
     PrioritiesModule,
     PaymentMethodsModule,
     YearsModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
