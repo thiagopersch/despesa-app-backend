@@ -14,6 +14,7 @@ import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
 import { YearsModule } from './years/years.module';
 import { TagsModule } from './tags/tags.module';
+import { TypeAccountsModule } from './type_accounts/type_accounts.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { TagsModule } from './tags/tags.module';
     PaymentMethodsModule,
     YearsModule,
     TagsModule,
+    TypeAccountsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
