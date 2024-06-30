@@ -15,6 +15,8 @@ import { UsersModule } from './users/users.module';
 import { YearsModule } from './years/years.module';
 import { TagsModule } from './tags/tags.module';
 import { TypeAccountsModule } from './type_accounts/type_accounts.module';
+import { ModulesModule } from './modules/modules.module';
+import { ProfilesModule } from './profiles/profiles.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { TypeAccountsModule } from './type_accounts/type_accounts.module';
     YearsModule,
     TagsModule,
     TypeAccountsModule,
+    ModulesModule,
+    ProfilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
