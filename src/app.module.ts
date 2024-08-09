@@ -17,6 +17,8 @@ import { TagsModule } from './tags/tags.module';
 import { TypeAccountsModule } from './type_accounts/type_accounts.module';
 import { ModulesModule } from './modules/modules.module';
 import { ProfilesModule } from './profiles/profiles.module';
+import { SituationsModule } from './situations/situations.module';
+import { ExpensesModule } from './expenses/expenses.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { ProfilesModule } from './profiles/profiles.module';
     TypeAccountsModule,
     ModulesModule,
     ProfilesModule,
+    SituationsModule,
+    ExpensesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

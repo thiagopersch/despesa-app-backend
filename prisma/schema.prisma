@@ -25,9 +25,8 @@ model User {
   createdAt       DateTime       @default(now()) @db.Timestamptz()
   updatedAt       DateTime       @updatedAt @db.Timestamptz()
   deletedAt       DateTime?      @db.Timestamptz()
-  Expense         Expense?       @relation(fields: [expenseId], references: [id])
-  expenseId       String?
   Session         Session[]
+  Expense         Expense[]
 }
 
 model Session {
@@ -92,6 +91,7 @@ model Year {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  Expense   Expense[]
 }
 
 model Month {
@@ -101,8 +101,7 @@ model Month {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  Expense   Expense?  @relation(fields: [expenseId], references: [id])
-  expenseId String?
+  Expense   Expense[]
 }
 
 model Payment_methods {
@@ -112,8 +111,7 @@ model Payment_methods {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  Expense   Expense?  @relation(fields: [expenseId], references: [id])
-  expenseId String?
+  Expense   Expense[]
 }
 
 model Priority {
@@ -123,8 +121,7 @@ model Priority {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  Expense   Expense?  @relation(fields: [expenseId], references: [id])
-  expenseId String?
+  Expense   Expense[]
 }
 
 model Category {
@@ -134,8 +131,7 @@ model Category {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  Expense   Expense?  @relation(fields: [expenseId], references: [id])
-  expenseId String?
+  Expense   Expense[]
 }
 
 model Tags {
@@ -145,8 +141,7 @@ model Tags {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  Expense   Expense?  @relation(fields: [expenseId], references: [id])
-  expenseId String?
+  Expense   Expense[]
 }
 
 model Type_accounts {
@@ -159,31 +154,50 @@ model Type_accounts {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
-  Expense    Expense?  @relation(fields: [expenseId], references: [id])
-  expenseId  String?
+  Expense    Expense[]
+}
+
+model Situation {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  color     String
+  status    Boolean
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Expense   Expense[]
 }
 
 model Expense {
-  id                 String            @id @default(uuid())
-  user_id            User[]
-  payment_methods_id Payment_methods[]
-  priority_id        Priority[]
-  month_id           Month[]
-  category_id        Category[]
-  tags_id            Tags[]
-  type_account_id    Type_accounts[]
-  name               String
-  description        String
-  amount_to_pay      Float
-  amount_paid        Float
-  pay_day            DateTime
-  due_date           DateTime
-  fixed_expense      Boolean
-  repeat             Boolean
-  number_repeat      Int
-  type_repeat        String
-  situation          String
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  deletedAt          DateTime?
+  id              String          @id @default(uuid())
+  user            User            @relation(fields: [userId], references: [id])
+  userId          String
+  paymentMethod   Payment_methods @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId String
+  priority        Priority        @relation(fields: [priorityId], references: [id])
+  priorityId      String
+  month           Month           @relation(fields: [monthId], references: [id])
+  monthId         String
+  year            Year            @relation(fields: [yearId], references: [id])
+  yearId          String
+  category        Category        @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  tags            Tags            @relation(fields: [tagsId], references: [id])
+  tagsId          String
+  typeAccount     Type_accounts   @relation(fields: [typeAccountId], references: [id])
+  typeAccountId   String
+  situation       Situation       @relation(fields: [situationId], references: [id])
+  situationId     String
+  name            String
+  description     String
+  amount_to_pay   Float
+  amount_paid     Float
+  pay_day         DateTime
+  due_date        DateTime
+  fixed_expense   Boolean
+  repeat          Boolean
+  number_repeat   String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  deletedAt       DateTime?
 }

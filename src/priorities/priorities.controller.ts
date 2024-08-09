@@ -11,7 +11,7 @@ import { CreatePriorityDto } from './dto/create-priority.dto';
 import { UpdatePriorityDto } from './dto/update-priority.dto';
 import { PrioritiesService } from './priorities.service';
 
-@Controller('priorities')
+@Controller('priority')
 export class PrioritiesController {
   constructor(private readonly prioritiesService: PrioritiesService) {}
 
